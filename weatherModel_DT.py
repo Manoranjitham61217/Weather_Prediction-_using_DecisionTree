@@ -3,8 +3,6 @@ import joblib
 import pandas as pd
 
 app = Flask(__name__)
-
-# Load model & encoders
 model = joblib.load("weather_pipeline_model.pkl")
 encoders = joblib.load("weather_label_encoders.pkl")
 
@@ -18,13 +16,9 @@ def predict():
     data = request.json
 
     input_df = pd.DataFrame([data])
-
-    # Encode input using saved encoders
     for col in input_df.columns:
         if col in encoders:
             input_df[col] = encoders[col].transform(input_df[col])
-
-    # Predict using pipeline
     prediction = model.predict(input_df)[0]
 
     return jsonify({
