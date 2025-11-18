@@ -1,15 +1,13 @@
 from flask import Flask, request, jsonify, render_template
 import joblib
-import pandas as pd
 
 app = Flask(__name__)
+
 model = joblib.load("weather_pipeline_model.pkl")
 encoders = joblib.load("weather_label_encoders.pkl")
-@app.route('/home')
+@app.route('/')
 def home():
     return render_template("index.html")
-
-
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
@@ -21,7 +19,6 @@ def predict():
         season = float(request.form['season'])
         visibility = float(request.form['visibility'])
 
-    # Order MUST match your model training order
         final_input = [[
             temperature,
             humidity,
@@ -36,11 +33,8 @@ def predict():
 
         return render_template("index.html", result=prediction)
 
-
-
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
+        return jsonify({"error": str(e)})
 
 if __name__ == "__main__":
     app.run(debug=True)
