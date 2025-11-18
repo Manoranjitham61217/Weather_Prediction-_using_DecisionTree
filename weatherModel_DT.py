@@ -15,15 +15,15 @@ def home():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        data = request.get_json()
-        temperature = float(data['temperature'])
-        humidity = float(data['humidity'])
-        precipitation = float(data['precipitation'])
-        cloud_cover = float(data['cloud_cover'])
-        uv_index = float(data['uv_index'])
-        season = float(data['season'])
-        visibility = float(data['visibility'])
- 
+        temperature = float(request.form['temperature'])
+        humidity = float(request.form['humidity'])
+        precipitation = float(request.form['precipitation'])
+        cloud_cover = float(request.form['cloud_cover'])
+        uv_index = float(request.form['uv_index'])
+        season = float(request.form['season'])
+        visibility = float(request.form['visibility'])
+
+    # Order MUST match your model training order
         final_input = [[
             temperature,
             humidity,
@@ -36,7 +36,8 @@ def predict():
 
         prediction = model.predict(final_input)[0]
 
-        return jsonify({"prediction": str(prediction)})
+        return render_template("index.html", result=prediction)
+
 
 
     except Exception as e:

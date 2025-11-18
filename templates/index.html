@@ -1,50 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Prediction</title>
-
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f2f2f2;
-            padding: 40px;
-        }
+        body {font-family: Arial; background: #f2f2f2; padding: 40px;}
         .container {
-            width: 420px;
-            margin: auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
+            width: 420px; margin: auto; padding: 20px;
+            background: white; border-radius: 10px;
             box-shadow: 0px 0px 10px #aaa;
         }
         input, select {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 5px;
-            border: 1px solid #aaa;
+            width: 100%; padding: 10px; margin: 8px 0;
+            border-radius: 5px; border: 1px solid #aaa;
         }
         button {
-            width: 100%;
-            padding: 12px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
+            width: 100%; padding: 12px;
+            background: #007bff; color: white;
+            border: none; border-radius: 5px;
+            font-size: 16px; cursor: pointer;
         }
-        button:hover {
-            background: #0056b3;
-        }
+        button:hover {background: #0056b3;}
         .result {
-            margin-top: 15px;
-            padding: 10px;
-            background: #e2ffe2;
-            border-left: 5px solid green;
-            display: none;
+            margin-top: 15px; padding: 10px;
+            background: #e2ffe2; border-left: 5px solid green;
         }
     </style>
 </head>
@@ -54,64 +32,45 @@
 <div class="container">
     <h2>🌦 Weather Prediction</h2>
 
-    <label>Temperature</label>
-    <input type="number" id="temperature" placeholder="Enter temperature">
+    <form action="/predict" method="POST">
 
-    <label>Humidity</label>
-    <input type="number" id="humidity" placeholder="Enter humidity">
+        <label>Temperature</label>
+        <input type="number" name="temperature" required>
 
-    <label>Precipitation (%)</label>
-    <input type="number" id="precipitation" placeholder="Enter precipitation %">
+        <label>Humidity</label>
+        <input type="number" name="humidity" required>
 
-    <label>Cloud Cover</label>
-    <input type="number" id="cloud_cover" placeholder="Enter cloud cover">
+        <label>Precipitation (%)</label>
+        <input type="number" name="precipitation" required>
 
-    <label>UV Index</label>
-    <input type="number" id="uv_index" placeholder="Enter UV index">
+        <label>Cloud Cover</label>
+        <input type="number" name="cloud_cover" required>
 
-    <label>Season</label>
-    <select id="season">
-        <option value="">Select Season</option>
-        <option value="0">Winter</option>
-        <option value="1">Spring</option>
-        <option value="2">Summer</option>
-        <option value="3">Autumn</option>
-    </select>
+        <label>UV Index</label>
+        <input type="number" name="uv_index" required>
 
-    <label>Visibility (km)</label>
-    <input type="number" id="visibility" placeholder="Enter visibility in km">
+        <label>Season</label>
+        <select name="season" required>
+            <option value="">Select Season</option>
+            <option value="0">Winter</option>
+            <option value="1">Spring</option>
+            <option value="2">Summer</option>
+            <option value="3">Autumn</option>
+        </select>
 
-    <button onclick="predictWeather()">Predict</button>
+        <label>Visibility (km)</label>
+        <input type="number" name="visibility" required>
 
-    <div class="result" id="resultBox"></div>
+        <button type="submit">Predict</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+        <strong>Prediction:</strong> {{ result }}
+    </div>
+    {% endif %}
+
 </div>
-
-<script>
-function predictWeather() {
-    let data = {
-        temperature: document.getElementById("temperature").value,
-        humidity: document.getElementById("humidity").value,
-        precipitation: document.getElementById("precipitation").value,
-        cloud_cover: document.getElementById("cloud_cover").value,
-        uv_index: document.getElementById("uv_index").value,
-        season: document.getElementById("season").value,
-        visibility: document.getElementById("visibility").value
-    };
-
-    fetch("https://weather-prediction-using-decisiontree-2.onrender.com/predict", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .then(response => {
-        document.getElementById("resultBox").style.display = "block";
-        document.getElementById("resultBox").innerHTML =
-            "<b>Prediction:</b> " + response.prediction;
-    })
-    .catch(err => alert("API Error: " + err));
-}
-</script>
 
 </body>
 </html>
