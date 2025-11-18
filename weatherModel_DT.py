@@ -10,8 +10,6 @@ def home():
     return render_template("index.html")
 
 
-
-@app.route("/", methods=["GET"])
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
