@@ -30,8 +30,9 @@ def predict():
         ]]
 
         prediction = model.predict(final_input)[0]
+        pred_word = encoders["weather_type"].inverse_transform([prediction])[0]
 
-        return render_template("index.html", result=prediction)
+        return render_template("index.html", result=pred_word)
 
     except Exception as e:
         return jsonify({"error": str(e)})
